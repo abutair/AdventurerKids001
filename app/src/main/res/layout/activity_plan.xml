@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WeeklyPlan.plan">
+
+    <RelativeLayout
+        android:id="@+id/realtive_layout_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+       >
+        <TextView
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Our"
+            android:textSize="33dp"
+            android:id="@+id/our"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="25dp"
+            android:textColor="#e69500 "/>
+        <TextView
+            android:id="@+id/weekly"
+            android:layout_toRightOf="@+id/our"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weekly "
+            android:textSize="30dp"
+            android:textColor="#0000d2	"/>
+        <TextView
+            android:layout_toRightOf="@id/weekly"
+            android:textStyle="bold"
+            android:layout_marginLeft="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Plan "
+            android:textSize="33dp"
+            android:textColor="#ff0f0f 	"/>
+
+    </RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/realtive_layout_1"
+
+        android:layout_marginTop="10dp"
+        android:id="@+id/plan_recycler_view"
+        android:scrollbars="horizontal"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

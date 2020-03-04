@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "356647919152",
+    "firebase_url": "https://adventurerkids-89b26.firebaseio.com",
+    "project_id": "adventurerkids-89b26",
+    "storage_bucket": "adventurerkids-89b26.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356647919152:android:8a636be4277719616397f5",
+        "android_client_info": {
+          "package_name": "com.abutair.adventurerkids"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "356647919152-6p61buugtie3euno6is94guj1rd3kahf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abutair.adventurerkids",
+            "certificate_hash": "eab9e875c516faeb444cfde9a699c8878152a806"
+          }
+        },
+        {
+          "client_id": "356647919152-5klrom535vlef7r4l5j72l07aofj3tnc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhHuK0lCqP--hDcWFsEWajNudwYPQbWps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "356647919152-5klrom535vlef7r4l5j72l07aofj3tnc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

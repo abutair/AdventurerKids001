@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="LightBlue">#5590EA</color>
+    <color name="DarkBlue">#0081cb</color>
+
+    <color name="orange">#ffab00</color>
+    <color name="primaryTextColor">#00a5ff</color>
+    <color name="whiteTextColor">#fff</color>
+    <color name="loginBkColor">#f0f0f0</color>
+    <color name="whiteCardColor">#fff</color>
+</resources>
