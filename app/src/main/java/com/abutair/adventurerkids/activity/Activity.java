@@ -2,12 +2,16 @@ package com.abutair.adventurerkids.activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.abutair.adventurerkids.DoctorCheck.DoctorCheck;
@@ -37,36 +41,77 @@ public class Activity extends AppCompatActivity {
 
     private ArrayList<String> mHour = new ArrayList<>();
     private  ArrayList<String>mActions = new ArrayList<>();
+    private  ArrayList<String>mDate = new ArrayList<>();
+    private  ArrayList<String>UserNames = new ArrayList<>();
     private FirebaseDatabase firebaseDatabase ;
     private DatabaseReference  myRef;
     private String  username ;
+    private  ArrayList<String>hour = new ArrayList<>();
+    private  ArrayList<String>action = new ArrayList<>();
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity);
+        getSharedData();
+        getAtivityData();
+        setupCalnder();
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        String day = calendar.get(Calendar.DATE)+"";
+        if(day.length()==1)
+        {
+            day = "0"+day;
+        }
+        String month = (calendar.get(Calendar.MONTH)+1) +"";
+        if(month.length()==1)
+        {
+            month = "0"+month;
+        }
+        String Currentdate = calendar.get(Calendar.YEAR)+"-"+month+"-"+day;
+        Log.d("onCreate  :-",Currentdate+"");
+
+       RetrieveData(Currentdate);
+
+
+    }
+
+    public void getAtivityData() {
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         myRef = firebaseDatabase.getReference("activities");
-        getSharedData();
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-        setupCalnder();
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        String Currentdate = calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE);
-
-        RetrieveData(Currentdate);
+                for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren())
+                {
 
 
+                    String s1 = dataSnapshot1.child("hour").getValue(String.class);
+                    String s2 = dataSnapshot1.child("desc").getValue(String.class);
+                    String un = dataSnapshot1.child("userName").getValue(String.class);
+                    UserNames.add(un);
+                    mDate.add(dataSnapshot1.child("date").getValue(String.class));
+                    mHour.add(s1);
+                    mActions.add(s2);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+      //  ProgressDialog();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        String Currentdate = calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE);
-
-        RetrieveData(Currentdate);
-    }
 
     private void setupCalnder()
     {
@@ -89,16 +134,24 @@ public class Activity extends AppCompatActivity {
             public void onDateSelected(Calendar date, int position) {
 
                 try {
-                        // 2019-02-03
-         String selected_date = date.get(Calendar.YEAR)+"-"+(date.get(Calendar.MONTH)+1)+"-"+date.get(Calendar.DATE);
+                    String day = date.get(Calendar.DATE)+"";
+//                    if(day.length()==1)
+//                    {
+//                        day = "0"+day;
+//                    }
+//
+//                    if(month.length()==1)
+//                    {
+//                        month = "0"+month;
+//                    }
+                    String month = (date.get(Calendar.MONTH)+1) +"";
+                   String selected_date = date.get(Calendar.YEAR)+"-"+month+"-"+day;
                    RetrieveData(selected_date);
-
-                   Toast.makeText(Activity.this,selected_date,Toast.LENGTH_LONG).show();
 
 
                 }catch (Exception e)
                 {
-                    Toast.makeText(Activity.this,"Error :- "+e.getMessage(),Toast.LENGTH_LONG).show();
+                    Log.d("mHour :-",e.getMessage());
                 }
 
              }
@@ -107,12 +160,11 @@ public class Activity extends AppCompatActivity {
 
 
 
-
     private  void initRecycleView()
     {
         RecyclerView recyclerView = findViewById(R.id.my_recycler_view);
 
-        activity_adapter adapter = new activity_adapter(this,mHour,mActions);
+        activity_adapter adapter = new activity_adapter(this,hour,action);
 
         recyclerView.setAdapter(adapter);
 
@@ -120,58 +172,56 @@ public class Activity extends AppCompatActivity {
     }
 
 
-
     public  void getSharedData()
-    {     SharedPreferences sharedPreferences ;
+    {
+        SharedPreferences sharedPreferences ;
 
         sharedPreferences  = getSharedPreferences("myPerf",MODE_PRIVATE);
         username= sharedPreferences.getString("UserName","empty");
     } // end Method
 
-
-    public  void  RetrieveData(final String d )
+   public  void  RetrieveData(final String d )
     {
-        myRef.addValueEventListener(new ValueEventListener() {
+        int index = mDate.indexOf(d);
+        //0 1 2 3 4 6
 
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        if(index>=0 )
+        {
 
+             Log.d("mHour :-",mHour.get(index)+"");
+             Log.d("mAction :-",mActions.get(index)+"");
+             for(int i=index;i<mDate.size();i++)
+             {
+                 //  5  6 7
 
+                 if (mDate.get(i).equals(d) )
+                 {
+                     // 1 1 1 1 1 1 1 1
 
-                for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren())
-                {
-                    String user_name =dataSnapshot1.child("userName").getValue(String.class) ;
-                    String date = dataSnapshot1.child("date").getValue(String.class);
+                         hour.add(mHour.get(i));
+                         action.add(mActions.get(i));
 
+                 }
 
+             }
 
-                    if (user_name.equals(username)  && d.equals(date)  )
-                    {
-                        mHour.add(dataSnapshot1.child("time").getValue(String.class));
-                        mActions.add(dataSnapshot1.child("description").getValue(String.class));
-                    }
-                    else
-                    {
-                      mHour.clear();
-                      mActions.clear();
-                    //  Toast.makeText(Activity.this,"No logs for this day ",Toast.LENGTH_LONG).show();
-                    }
-
-                    initRecycleView() ;
-
-
-
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            initRecycleView();
+        }
+        else
+        {
+         hour.clear();
+         action.clear();
+            initRecycleView();
+        }
 
 
 
-        });
+        Log.d("index :-",mDate.indexOf(d)+"");
+
     }// end Method
+
+
+
 
 
     } // end Class

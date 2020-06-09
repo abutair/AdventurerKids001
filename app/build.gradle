@@ -58,6 +58,8 @@ dependencies {
     //Crop Image
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
 
+    // Pdf view
+    implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
 
 
     testImplementation 'junit:junit:4.12'

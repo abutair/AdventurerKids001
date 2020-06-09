@@ -1,6 +1,9 @@
 package com.abutair.adventurerkids;
 
 import android.Manifest;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
@@ -14,9 +17,11 @@ import android.os.Build;
 import android.os.Bundle;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -26,6 +31,8 @@ import com.abutair.adventurerkids.activity.Activity;
 import com.abutair.adventurerkids.camera.ExampleDialog;
 import com.abutair.adventurerkids.events.events;
 
+import com.abutair.adventurerkids.notes.Note;
+import com.abutair.adventurerkids.notifications.Notification;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,8 +50,8 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.File;
 import java.util.HashMap;
+
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -58,47 +65,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DatabaseReference mDatabase;
     private Uri mainImage = null;
     private  boolean isChanged  = false;
+       String t= "",m="";
 
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        SharedPreferences sharedPreferences = getSharedPreferences("myPerf", 0);
-        username = sharedPreferences.getString("UserName", "empty");
-        if (username.equals("empty")) {
-
-            Intent i = new Intent(MainActivity.this, login.class);
-            startActivity(i);
-            finish();
-        } else {
-            SharedData(username);
-
-        }
-
-
-
-
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         c1 = findViewById(R.id.activity);
-        c2 = findViewById(R.id.events_cardview);
+        c2 = findViewById(R.id.notification_card);
         c3 = findViewById(R.id.doctor_card);
         c4 = findViewById(R.id.plan_cardview);
         c5= findViewById(R.id.live_camera);
         storageref = FirebaseStorage.getInstance().getReference();
         ProfileImage = findViewById(R.id.profile_image);
-
          ProfileImage.setOnClickListener(this);
-
+        AuthCheck();
         RetriveImg();
         intOnClickEvents();
+       Notification () ;
 
 
     } // end OnCreate
@@ -116,12 +104,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         c2.setOnClickListener(new View.OnClickListener() {
-            @Override
+           @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, events.class);
-                startActivity(i);
-            }
-        });
+               Intent i = new Intent(MainActivity.this, Notification.class);
+               i.putExtra("msg",m);
+               startActivity(i);
+           }
+       });
 
 
         c3.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +133,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         c5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDialog();
+                Intent i = new Intent(MainActivity.this, Note.class);
+                i.putExtra("username",username);
+                startActivity(i);
             }
         });
 
@@ -168,8 +159,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         CheckUserPermisson() ;
-
-
 
     }
 
@@ -227,8 +216,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
- private  void RetriveImg()
- {
+   private  void RetriveImg()
+   {
      mDatabase = FirebaseDatabase.getInstance().getReference("ProfileImages");
 
      mDatabase.addValueEventListener(new ValueEventListener() {
@@ -256,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
- }
+   }
 
     private  void uploadImage()
     {
@@ -289,4 +278,78 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+
+
+   private void Notification ()
+    {
+       FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+          DatabaseReference  myRef = firebaseDatabase.getReference("notif");
+
+           //String bla = myRef.child("").
+
+          myRef.addValueEventListener(new ValueEventListener() {
+              @Override
+              public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                  for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren())
+                  {
+                      t= dataSnapshot1.child("title").getValue(String.class);
+                      m = dataSnapshot1.child("desc").getValue(String.class);
+                      CreateNotification(t,m);
+
+
+                  }
+
+              }
+
+              @Override
+              public void onCancelled(@NonNull DatabaseError databaseError) {
+
+              }
+          });
+
+
+
+    }
+
+    private void CreateNotification(String s , String s2) {
+
+
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                    MainActivity.this
+            ).setContentTitle(s)
+                    .setContentText(s2)
+                    .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                    .setAutoCancel(true);
+            Intent i = new Intent(MainActivity.this, Notification.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.putExtra("msg",m);
+            PendingIntent  pendingIntent = PendingIntent.getActivity(MainActivity.this,
+                    0,i,PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(pendingIntent);
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(
+                    Context.NOTIFICATION_SERVICE
+            );
+
+            notificationManager.notify(0,builder.build());
+
+
+
+    }
+
+    private void AuthCheck()
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences("myPerf", 0);
+        username = sharedPreferences.getString("UserName", "empty");
+        if (username.equals("empty")) {
+
+            Intent i = new Intent(MainActivity.this, login.class);
+            startActivity(i);
+            finish();
+        } else {
+            SharedData(username);
+
+        }
+    }
 } // end Class

@@ -94,45 +94,7 @@
             </androidx.cardview.widget.CardView>
 
             <!-- Column 2 -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/events_cardview"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                app:cardElevation="8dp"
-                app:cardCornerRadius="8dp"
-                >
 
-                <LinearLayout
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/events" />
-
-                    <TextView
-                        android:layout_marginTop="5dp"
-                        android:text="Events"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
 
 
             <!-- Row 2 -->
@@ -242,13 +204,13 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:src="@drawable/cctv"
+                        android:src="@drawable/note"
                         android:layout_gravity="center_horizontal"
                         android:layout_width="50dp"
                         android:layout_height="50dp" />
 
                     <TextView
-                        android:text="live camera"
+                        android:text="Notes"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
                         android:textSize="18sp"
@@ -261,7 +223,44 @@
             </androidx.cardview.widget.CardView>
 
             <!-- Column 2 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/notification_card"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="8dp"
+                >
 
+                <LinearLayout
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_margin="16dp"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:src="@drawable/ic_notifications_black_24dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" />
+
+                    <TextView
+                        android:text="Notification"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
         </GridLayout>
 
     </LinearLayout>

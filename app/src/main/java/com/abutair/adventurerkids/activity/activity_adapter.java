@@ -7,14 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.abutair.adventurerkids.R;
-
 import java.util.ArrayList;
 
 public class activity_adapter  extends  RecyclerView.Adapter<activity_adapter.ViewHolder> {
-
-
     private ArrayList<String> mHour = new ArrayList<>();
     private  ArrayList<String>mActions = new ArrayList<>();
     private Context mContext;

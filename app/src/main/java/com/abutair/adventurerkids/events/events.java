@@ -5,25 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.net.Uri;
+import android.graphics.pdf.PdfRenderer;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.abutair.adventurerkids.R;
-import com.abutair.adventurerkids.WeeklyPlan.plan;
-import com.abutair.adventurerkids.WeeklyPlan.plan_adapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class events extends AppCompatActivity {
@@ -34,6 +25,7 @@ public class events extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase ;
     private DatabaseReference myRef;
 
+    private PdfRenderer pdfRenderer ;
 
 
     @Override
@@ -46,13 +38,10 @@ public class events extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
-
         firebaseDatabase = FirebaseDatabase.getInstance();
         myRef = firebaseDatabase.getReference("events");
-        RecycleView_Int() ;
+        RecycleView_Int();
     }
-
-
 
     private  void RecycleView_Int()
     {
@@ -65,9 +54,9 @@ public class events extends AppCompatActivity {
                     Title.add(dataSnapshot1.child("title").getValue(String.class));
                     Desc.add(dataSnapshot1.child("description").getValue(String.class));
                     Images.add(dataSnapshot1.child("deleteUrl").getValue(String.class));
-
                 }
                 initRecycleView();
+
             }
 
             @Override
@@ -75,16 +64,22 @@ public class events extends AppCompatActivity {
 
             }
         });
+
+
+
     }
-
-
 
     private  void initRecycleView()
     {
-        RecyclerView recyclerView = findViewById(R.id.events_recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.event_recycler_view);
+
         events_adapter adapter = new events_adapter(events.this,Title,Images,Desc);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+
         recyclerView.setAdapter(adapter);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
     }
+
+
 
 }

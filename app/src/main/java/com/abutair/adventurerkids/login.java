@@ -2,16 +2,15 @@ package com.abutair.adventurerkids;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,12 +21,13 @@ import com.google.firebase.database.ValueEventListener;
 public class login extends AppCompatActivity implements View.OnClickListener {
 
  private Button b ;
- private  EditText name,password;
+ private EditText name,password;
  private FirebaseDatabase database  ;
  private DatabaseReference myRef  ;
 
  private ProgressDialog mProgress ;
-
+    String n = "";
+    String p = "";
 
 
 
@@ -35,8 +35,8 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("users");
+
+
          b= findViewById(R.id.cirLoginButton);
         name = findViewById(R.id.editTextEmail);
 
@@ -47,15 +47,17 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
 
+        database= FirebaseDatabase.getInstance();
+        myRef= database.getReference();
         b.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-         String n,p;
+
 
         mProgress.show();
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -65,9 +67,11 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 
                 for (DataSnapshot dataSnapshot2:dataSnapshot.getChildren() )
                 {
-                    String n = dataSnapshot2.child("userName").getValue(String.class);
+                     n = dataSnapshot2.child("UserId").getValue(String.class);
 
-                    String p = dataSnapshot2.child("password").getValue(String.class);
+                     p = dataSnapshot2.child("password").getValue(String.class);
+                    Toast.makeText(login.this,"UserId"+n, Toast.LENGTH_LONG).show();
+                    Toast.makeText(login.this,"passowrd"+p, Toast.LENGTH_LONG).show();
 
                     if (n.equals(name.getText().toString()) && p.equals(password.getText().toString()))
                     {
@@ -88,7 +92,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                 {
                     mProgress.dismiss();
 
-                    Toast.makeText(login.this,"Wrong username or password",Toast.LENGTH_LONG).show();
+                    Toast.makeText(login.this,"Wrong username or password", Toast.LENGTH_LONG).show();
 
                 }
 
@@ -111,8 +115,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         SharedPreferences sharedPreferences = getSharedPreferences("myPerf",0);
         SharedPreferences.Editor myedit   =  sharedPreferences.edit();
         myedit.putString("UserName",name.getText().toString());
-        myedit.apply();
-        Toast.makeText(login.this,name.getText(),Toast.LENGTH_LONG).show();
+        myedit.commit();
     }
 
 

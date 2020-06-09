@@ -14,10 +14,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DoctorCheck.DoctorCheck"></activity>
+
+        <activity android:name=".notifications.Notification" />
+        <activity android:name=".DoctorCheck.DoctorCheck" />
         <activity android:name=".WeeklyPlan.plan" />
         <activity android:name=".events.events" />
         <activity android:name=".activity.Activity" />
+        <activity android:name=".notes.Note"/>
+        <activity android:name=".notes.NoteFailed"/>
+        <activity android:name=".notes.NoteSucc"/>
         <activity android:name=".login" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -26,9 +31,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
     </application>
 
 </manifest>

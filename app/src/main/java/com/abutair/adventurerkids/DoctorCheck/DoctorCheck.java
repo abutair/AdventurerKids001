@@ -101,12 +101,12 @@ public class DoctorCheck extends AppCompatActivity {
 
                 for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren())
                 {
-                    String user_name =dataSnapshot1.child("userName").getValue(String.class) ;
+                   // String user_name =dataSnapshot1.child("userName").getValue(String.class) ;
                     String date = dataSnapshot1.child("date").getValue(String.class);
 
-                    if (user_name.equals(username) && d.equals(date))
+                    if (d.equals(date))
                     {
-                        check.add(dataSnapshot1.child("description").getValue(String.class));
+                        check.add(dataSnapshot1.child("desc").getValue(String.class));
 
                     }
                     else
